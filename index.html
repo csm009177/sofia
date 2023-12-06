@@ -10,6 +10,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      list-style: none;
     }
   </style>
 </head>
@@ -27,7 +28,8 @@
     ];
   
   const bigCont =
-    createElement("div", { style: "width:100vw; height:100vh; background-color: gray;" }, 
+    createElement("div", { id:"root",
+      style: "width:100vw; height:100vh; background-color: gray;" }, 
       createElement("div",{ id:"head",
         style: "width:100vw; height:10vh; background-color: rgb(150, 150, 150);" }, component(stateData)),
       createElement("div",{ id:"content",
