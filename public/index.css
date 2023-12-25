@@ -1,0 +1,57 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#bigcont {
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: row
+}
+
+#head {
+  width: 100vw;
+  height: 000vh
+}
+
+#body {
+  width: 090vw;
+  height: 000vh
+}
+
+#foot {
+  width: 000vw;
+  height: 000vh
+}
+
+#stateCont {
+  padding: 5vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+#leftside{
+  width:025vw; height:100vh;
+}
+
+#middle{
+  width:075vw; height:100vh;
+}
+
+#rightside{
+  width:000vw; height:100vh;
+}
+
+.stateDataCalss {
+  color: white;
+  text-decoration-line: none
+}
+
