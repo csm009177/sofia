@@ -9,70 +9,73 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
     </style>
 </head>
-<body>
-    <div id="root"></div>
-    <script type="module">
-        import { createElement, component, render } from './module/component.js'
-        const stateData = [
-            { hash: '#home', text: 'home' },
-            { hash: '#cpu',  text: 'cpu'  },
-            { hash: '#m/b',  text: 'm/b'  },
-            { hash: '#p/w',  text: 'p/w'  },
-            { hash: '#ram',  text: 'ram'  },
-            { hash: '#ssd',  text: 'ssd'  },
-            { hash: '#odd',  text: 'odd'  },
-            { hash: '#hdd',  text: 'hdd'  },
-            { hash: '#gpu',  text: 'gpu'  },
-        ];
-      
-    const bigcont = 
-    createElement("div", {id:"bigcont"}, 
-          createElement("div", {id:"leftside" },
-            ),
-          createElement("div", {id:"middle" }, 
-            component(stateData)
-            ),
-          createElement("div", {id:"rightside" }, ""
-            ),
-        )
+<body id="body">
+  <div id="root"></div>
+  <script type="module">
+    import { createElement, component, render } from './module/component.js'
+    const stateData = [
+      { hash: '#home', text: 'home', name: "home" },
+      { hash: '#info', text: 'info', name: "info" },
+      { hash: '#travel', text: 'travel', name: "travel" },
+      { hash: '#future', text: 'future', name: "future" },
+    ];
+
+    const bigcont =
+      createElement("div", { id: "bigcont" },
+        createElement("div", { id: "leftside" },
+        ),
+        createElement("div", { id: "middle" },
+          component(stateData)
+        ),
+        createElement("div", { id: "rightside" }, ""
+        ),
+      )
 
     const contentDiv = document.getElementById('root');
     contentDiv.appendChild(render(bigcont)); // dom을 렌더해서 대상에 어펜드 하기
-    
+    const body = document.getElementById('body')
+    body.style.backgroundImage = 'url("./babysofia.jpg")'
 
-    window.addEventListener('hashchange', () => {
+    body.style.backgroundRepeat = "no-repeat"
+    body.style.backgroundSize = "auto"
+
+    window.addEventListener('DOMContentLoaded', () => {
       const hash = window.location.hash.substr(1);
       const body = document.getElementById('body')
       body.innerHTML = ""
-      
+
+
       switch (hash) {
-        case 'login' : 
-        const loginBody = 
-        createElement("div", {class:"hashBody", }
-          
-        )
-        body.appendChild(render(loginBody));
+        case 'home':
+          const loginBody =
+            createElement("div", { class: "hashBody", }
+
+            )
+          body.appendChild(render(loginBody));
+
+          // background-repeat: no-repeat; background-size: auto;
           break;
-        case 'signup' : 
-        const signupBody = 
-        createElement("div", {class:"hashBody", },
-          createElement("form", {id:"signupform"}, 
-            createElement("input",  {}, "email"),
-            createElement("input",  {}, ""),
-            createElement("input",  {}, ""),
-            createElement("input",  {}, ""),
-            createElement("button", {}, "submit"),
-          ),
-        )
-        body.appendChild(render(signupBody));
+        case 'info':
+          const infoBody =
+            createElement("div", { class: "hashBody", },
+              createElement("form", { id: "signupform" },
+                createElement("input", {}, "email"),
+                createElement("input", {}, ""),
+                createElement("input", {}, ""),
+                createElement("input", {}, ""),
+                createElement("button", {}, "submit"),
+              ),
+            )
+          body.appendChild(render(infoBody));
           break;
-        default : 
+        default: 
           break
       }
-    }); 
+    });
     // window.dispatchEvent(new Event('hashchange'));
     window.dispatchEvent(new Event('DOMContentLoaded'));
 
   </script>
 </body>
+
 </html>
