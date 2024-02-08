@@ -11,10 +11,8 @@ import {
   useSearchParams,
 } from "next/navigation";
 
-export default function RootLayout({ children }: ChildrenProps) {
-  const [url, setUrl] = useState(window.location.pathname); // 현재 URL 경로를 가져옴
+export default function MainLayout({ children }: ChildrenProps) {
   const [showHeader, setShowHeader] = useState(true);
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 

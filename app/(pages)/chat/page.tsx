@@ -3,36 +3,34 @@
 // Chat 컴포넌트
 import { useState } from "react";
 
-export default function Chat() {
-  const [chatMessage, setChatMessage] = useState("");
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    
+export default function Chat() {
+  const [chatContents, setChatContents] = useState("");
+  
+  const handleChatSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       await fetch('/chatlogForm', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ chatContents: chatMessage }),
+        body: JSON.stringify({ chatContents }),
       });
-      // 채팅 메시지를 서버로 전송한 후 입력 필드 초기화
-      setChatMessage("");
+      console.log("Chat submitted successfully!");
     } catch (error) {
-      console.error("Error sending chat message:", error);
+      console.error("Error submitting chat:", error);
     }
   };
 
   return (
     <div className="flex flex-col justify-between h-full w-screen overflow-hidden">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleChatSubmit}>
         <input
           type="text"
-          value={chatMessage}
-          onChange={(e) => setChatMessage(e.target.value)}
+          value={chatContents}
+          onChange={(e) => setChatContents(e.target.value)}
         />
-        <button type="submit">Send</button>
+        <button type="submit">submit</button>
       </form>
     </div>
   );

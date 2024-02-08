@@ -101,21 +101,18 @@ app.prepare().then(() => {
     );
   });
 
-  server.post('/chatlogForm', (req, res) => {
+  server.post("/chatlogForm", (req, res) => {
     const { chatContents } = req.body;
-  
-    // 채팅 메시지를 데이터베이스에 삽입
     const query = "INSERT INTO chatlog (chatContents) VALUES (?)";
     connection.query(query, [chatContents], (err, results, fields) => {
       if (err) {
-        console.error("Error saving chat message:", err);
-        res.status(500).json({ message: "채팅 메시지를 저장하는 데 실패했습니다." });
+        console.error("Error chatlog Form :", err);
+        res.status(500).json({ message: "채팅 입력에 실패했습니다." });
         return;
       }
-      res.status(200).json({ message: "채팅 메시지를 성공적으로 저장했습니다." });
+      res.status(200).json({ message: "채팅 입력이 완료되었습니다." });
     });
   });
-  
 
   // Next.js 서버에 라우팅 위임
   server.all("*", (req, res) => {
@@ -123,8 +120,8 @@ app.prepare().then(() => {
   });
 
   // 서버 시작
-  server.listen(3000, (err) => {
+  server.listen(3003, (err) => {
     if (err) throw err;
-    console.log("> Ready on http://localhost:3000");
+    console.log("> Ready on http://localhost:3003");
   });
 });
