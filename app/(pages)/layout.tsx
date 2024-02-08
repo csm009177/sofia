@@ -19,7 +19,7 @@ export default function RootLayout({ children }: ChildrenProps) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (pathname=== "/" || pathname === "/chat" || pathname === "/planer" || pathname === "/album") {
+    if (pathname=== "/login" || pathname === "/signin" ) {
       setShowHeader(false);
     } else {
       setShowHeader(true);
@@ -27,8 +27,8 @@ export default function RootLayout({ children }: ChildrenProps) {
   }, [pathname]);
 
   return (
-    <div className="flex flex-col justify-between h-screen w-screen overflow-hidden">
-      {showHeader ? "" : <Header />}
+    <div className="flex flex-col justify-between h-screen w-screen overflow-hidden font-bold">
+      {showHeader ? <Header />: null }
       {children}
     </div>
   );
