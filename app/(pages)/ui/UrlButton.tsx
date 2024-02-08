@@ -11,6 +11,8 @@ export default function UrlButton({ url, title }: { url: string; title: string }
     console.log(`url : ${url}` )
   };
   return (
-    <button onClick={useCustomButton}>{title}</button>
+    <button 
+    // style={{width:"7vh", height:"" }}
+    onClick={useCustomButton}>{title}</button>
   );
 }
