@@ -103,7 +103,7 @@ app.prepare().then(() => {
 
   server.post("/chatlogForm", (req, res) => {
     const { chatContents } = req.body;
-    const query = "INSERT INTO chatlog (chatContents) VALUES (?)";
+    const query = "INSERT INTO chatlog (chatContents, chatDate) VALUES (?, NOW())"; // chatDate를 추가하여 현재 날짜 저장
     connection.query(query, [chatContents], (err, results, fields) => {
       if (err) {
         console.error("Error chatlog Form :", err);
@@ -113,6 +113,7 @@ app.prepare().then(() => {
       res.status(200).json({ message: "채팅 입력이 완료되었습니다." });
     });
   });
+  
 
   // Next.js 서버에 라우팅 위임
   server.all("*", (req, res) => {
