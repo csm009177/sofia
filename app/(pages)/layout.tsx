@@ -12,18 +12,19 @@ import {
 } from "next/navigation";
 
 export default function RootLayout({ children }: ChildrenProps) {
-  useParams;
   const [url, setUrl] = useState(window.location.pathname); // 현재 URL 경로를 가져옴
   const [showHeader, setShowHeader] = useState(true);
-  const href = window.location.href;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
   useEffect(() => {
-    if (url === "/") {
-      setShowHeader(!showHeader);
+    if (pathname=== "/" || pathname === "/chat" || pathname === "/planer" || pathname === "/album") {
+      setShowHeader(false);
+    } else {
+      setShowHeader(true);
     }
-  }, [pathname, searchParams]);
+  }, [pathname]);
 
   return (
     <div className="flex flex-col justify-between h-screen w-screen overflow-hidden">

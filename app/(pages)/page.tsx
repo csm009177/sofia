@@ -1,7 +1,7 @@
 'use client'
 import Image from "next/image";
 import Link from "next/link";
-import TestPage from './chatlog/page';
+import TestPage from './chat/page';
 
 export default function Main() {
   return (
