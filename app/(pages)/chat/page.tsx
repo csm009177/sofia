@@ -8,6 +8,7 @@ import { chatSubmitContext } from "@/app/context/chatContext";
 
 export default function Chat() {
   const [chatSubmit, setChatSubmit] = useState(null)
+
   return (
     <div className="flex flex-col justify-between w-screen overflow-hidden">
       <chatSubmitContext.Provider value={ chatSubmit, setChatSubmit }>

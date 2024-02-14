@@ -24,7 +24,7 @@ export default function ChatLogT() {
   }, [chatSubmit]);
 
   return (
-    <div style={{ overflowY: "scroll", maxHeight: "400px" }}>
+    <div style={{ overflowY: "scroll", maxHeight: "400px", width:"100px" }}>
       {chatLogs.map((log) => (
         <div key={log.chatLogKey}>{log.chatContents}</div>
       ))}

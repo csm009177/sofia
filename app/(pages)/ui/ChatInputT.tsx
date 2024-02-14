@@ -5,8 +5,11 @@ import { chatSubmitContext } from "@/app/context/chatContext";
 
 export default function ChatInputT() {
   const [chatContents, setChatContents] = useState("");
-  const context = useContext(chatSubmitContext); // 전체 context를 가져옴
+  const { chatSubmit, setChatSubmit } = useContext(chatSubmitContext);
+  useEffect(()=>{
 
+  },[chatSubmit])
+  
   const handleChatSubmit = async () => {
     try {
       await fetch("/chatlogForm", {
@@ -18,14 +21,15 @@ export default function ChatInputT() {
       });
       console.log("Chat submitted successfully!");
       // 채팅이 제출되면 채팅 내역을 다시 가져옴
-      context.setChatSubmit(); // 전체 context를 통해 함수 호출
+
+      
     } catch (error) {
       console.error("Error submitting chat:", error);
     }
   };
 
   return (
-    <form onSubmit={handleChatSubmit}>
+    <form onSubmit={handleChatSubmit} style={{width:"100px"}}>
       <input
         type="text"
         value={chatContents}
