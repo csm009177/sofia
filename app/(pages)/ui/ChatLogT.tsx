@@ -1,12 +1,10 @@
-// ChatLog 컴포넌트
+
 "use client";
 
-// Chat 컴포넌트
 import React, { useState, useEffect, useContext } from "react";
 import { chatSubmitContext } from "@/app/context/chatContext";
+
 // ChatLog 컴포넌트
-
-
 export default function ChatLogT() {
   const [chatLogs, setChatLogs] = useState([]);
   const { chatSubmit } = useContext(chatSubmitContext);
