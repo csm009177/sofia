@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 
-export default function ChatTest() {
+export default function ChatInputT() {
   const [chatContents, setChatContents] = useState("");
   
-  const handleChatSubmit = async () => {
+  const handleChatSubmit = async (e) => {
+    e.preventDefault();
     try {
       await fetch("/chatlogForm", {
         method: "POST",
