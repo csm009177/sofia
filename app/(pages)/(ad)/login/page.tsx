@@ -2,7 +2,7 @@
 
 // Login 컴포넌트
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // 변경된 import 문
 
 export default function Login() {
   const [userId, setUserId] = useState("");
@@ -18,7 +18,7 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ Identification: userId, password }),
+        body: JSON.stringify({ id: userId, pw: password }), // 변경된 키 이름
       });
       const data = await response.json();
       setMessage(data.message);
