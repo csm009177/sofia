@@ -68,37 +68,30 @@ app.prepare().then(() => {
   });
 
   // 로그인 API 엔드포인트
-  server.post("/login", (req, res) => {
+  server.post("/loginForm", (req, res) => {
     const { Identification, password } = req.body;
 
     // 해당 사용자가 존재하는지 확인하는 쿼리
-    const query =
-      "SELECT * FROM users WHERE id = ? AND password = ? AND admin = 1";
-    connection.query(
-      query,
-      [Identification, password],
-      (err, results, fields) => {
-        if (err) {
-          console.error("Error logging in:", err);
-          res.status(500).json({ message: "로그인에 실패했습니다." });
-          return;
-        }
-
-        // 로그인 성공 여부 확인
-        if (results.length > 0) {
-          const user = results[0];
-          const tokenPayload = {
-            username: user.username,
-          };
-          const token = jwt.sign(tokenPayload, secretKey, { expiresIn: "1h" });
-          res.status(200).json({ message: "로그인 성공", token });
-        } else {
-          res
-            .status(401)
-            .json({ message: "아이디 또는 비밀번호가 올바르지 않습니다." });
-        }
+    const query = "SELECT * FROM users WHERE id = ? AND pw = ? ";
+    connection.query(query, [Identification, password], (err, results, fields) => {
+      if (err) {
+        console.error("Error logging in:", err);
+        res.status(500).json({ message: "로그인에 실패했습니다." });
+        return;
       }
-    );
+
+      // 로그인 성공 여부 확인
+      if (results.length > 0) {
+        const user = results[0];
+        const tokenPayload = {
+          username : user.username
+        }
+        const token = jwt.sign(tokenPayload, secretKey, { expiresIn: '1h' });
+        res.status(200).json({ message: "로그인 성공", token });
+      } else {
+        res.status(401).json({ message: "아이디 또는 비밀번호가 올바르지 않습니다." });
+      }
+    });
   });
 
   server.post("/chatlogForm", (req, res) => {
@@ -120,9 +113,10 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
+  const port = 3003
   // 서버 시작
-  server.listen(3003, (err) => {
+  server.listen(port, (err) => {
     if (err) throw err;
-    console.log("> Ready on http://localhost:3003");
+    console.log(`> Ready on http://localhost:${port}`);
   });
 });

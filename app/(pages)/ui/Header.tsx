@@ -10,7 +10,7 @@ export default function Header() {
       </div>
       <div className="flex flex-row h-24 w-1/6 p-5 justify-between">
         <UrlButton url="login" title="login" />
-        <UrlButton url="signin" title="signin" />
+        <UrlButton url="signup" title="signup" />
       </div>
     </div>
   );
