@@ -52,7 +52,7 @@ app.prepare().then(() => {
   server.use(express.urlencoded({ extended: true, limit: "10mb" })); // URL-encoded 데이터를 해석하는 미들웨어에 대한 크기 제한 설정
 
   // 회원가입 API 엔드포인트
-  server.post("/signup", (req, res) => {
+  server.post("/signupForm", (req, res) => {
     const { Identification, pw } = req.body;
 
     // 회원가입 정보를 DB에 삽입
