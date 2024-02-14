@@ -1,13 +1,13 @@
 "use client";
 
 // Chat 컴포넌트
-// Chat 컴포넌트
 import React, { useState, useEffect } from "react";
 import ChatLog from "../ui/ChatLog";
 
 export default function Chat() {
   const [chatContents, setChatContents] = useState("");
   const [chatLogs, setChatLogs] = useState([]);
+  const [username, setUsername] = useState(""); // 사용자 이름 상태 추가
 
   // 채팅 내역을 가져오는 함수
   const fetchChatLogs = async () => {
@@ -20,8 +20,25 @@ export default function Chat() {
     }
   };
 
+  // 사용자 이름을 가져오는 함수
+  const fetchUsername = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("/getUserInfo", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      setUsername(data.username);
+    } catch (error) {
+      console.error("Error fetching username:", error);
+    }
+  };
+
   useEffect(() => {
     fetchChatLogs();
+    fetchUsername();
   }, []);
 
   const handleChatSubmit = async (e) => {
@@ -54,7 +71,7 @@ export default function Chat() {
         <button type="submit">submit</button>
       </form>
       {/* 채팅 내역을 화면에 출력하는 새로운 컴포넌트를 사용 */}
-      <ChatLog chatLogs={chatLogs} />
+      <ChatLog chatLogs={chatLogs} username={username} />
     </div>
   );
 }

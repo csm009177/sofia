@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import UrlButton from "./UrlButton";
+import LoginButton from "./LoginButton";
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,7 +20,7 @@ export default function Header() {
         <UrlButton url="album" title="album" />
       </div>
         <div className="flex flex-row h-24 w-1/6 p-5 justify-between">
-          <UrlButton url="login" title="login" />
+          <LoginButton/>
           <UrlButton url="signup" title="signup" />
         </div>
     </div>
