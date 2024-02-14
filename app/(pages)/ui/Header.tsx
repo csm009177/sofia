@@ -12,7 +12,7 @@ export default function Header() {
   }, []);
 
   return (
-    <div className="flex flex-row w-screen justify-between">
+    <div className="flex flex-row w-screen h-48 justify-between">
       <div className="flex flex-row h-24 w-1/4 p-5 justify-between">
         <UrlButton url="chat" title="chat" />
         <UrlButton url="planer" title="planer" />

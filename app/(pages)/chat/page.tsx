@@ -1,7 +1,9 @@
 "use client";
 
 // Chat 컴포넌트
-import { useEffect, useState } from "react";
+// Chat 컴포넌트
+import React, { useState, useEffect } from "react";
+import ChatLog from "../ui/Chatlog";
 
 export default function Chat() {
   const [chatContents, setChatContents] = useState("");
@@ -50,12 +52,8 @@ export default function Chat() {
         />
         <button type="submit">submit</button>
       </form>
-      {/* 채팅 내역을 화면에 출력 */}
-      <div style={{ overflowY: "scroll", maxHeight: "400px" }}>
-        {chatLogs.map((log) => (
-          <div key={log.chatLogKey}>{log.chatContents}</div>
-        ))}
-      </div>
+      {/* 채팅 내역을 화면에 출력하는 새로운 컴포넌트를 사용 */}
+      <ChatLog chatLogs={chatLogs} />
     </div>
   );
 }
