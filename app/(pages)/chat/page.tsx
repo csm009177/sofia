@@ -1,12 +1,12 @@
 "use client";
 
 // Chat 컴포넌트
-// Chat 컴포넌트
 import React, { useState, useEffect } from "react";
 import ChatLog from "../ui/Chatlog";
+import ChatInput from "../ui/ChatInput";
+import ChatTest from "../ui/ChatTest";
 
 export default function Chat() {
-  const [chatContents, setChatContents] = useState("");
   const [chatLogs, setChatLogs] = useState([]);
 
   // 채팅 내역을 가져오는 함수
@@ -24,8 +24,7 @@ export default function Chat() {
     fetchChatLogs();
   }, []);
 
-  const handleChatSubmit = async (e) => {
-    e.preventDefault();
+  const handleChatSubmit = async (chatContents) => {
     try {
       await fetch("/chatlogForm", {
         method: "POST",
@@ -44,16 +43,11 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col justify-between w-screen overflow-hidden">
-      <form onSubmit={handleChatSubmit}>
-        <input
-          type="text"
-          value={chatContents}
-          onChange={(e) => setChatContents(e.target.value)}
-        />
-        <button type="submit">submit</button>
-      </form>
+      {/* 채팅 입력 컴포넌트 추가 */}
+      <ChatInput onSubmit={handleChatSubmit} />
       {/* 채팅 내역을 화면에 출력하는 새로운 컴포넌트를 사용 */}
       <ChatLog chatLogs={chatLogs} />
+      <ChatTest/>
     </div>
   );
 }
