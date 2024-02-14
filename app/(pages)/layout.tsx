@@ -17,7 +17,7 @@ export default function MainLayout({ children }: ChildrenProps) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (pathname=== "/login" || pathname === "/signin" ) {
+    if (pathname=== "/login" || pathname === "/signup" ) {
       setShowHeader(false);
     } else {
       setShowHeader(true);
