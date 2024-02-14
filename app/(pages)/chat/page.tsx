@@ -1,15 +1,31 @@
 "use client";
 
 // Chat 컴포넌트
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 
 export default function Chat() {
   const [chatContents, setChatContents] = useState("");
-  
-  const handleChatSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const [chatLogs, setChatLogs] = useState([]);
+
+  // 채팅 내역을 가져오는 함수
+  const fetchChatLogs = async () => {
     try {
-      await fetch('/chatlogForm', {
+      const response = await fetch("/chatlogs");
+      const data = await response.json();
+      setChatLogs(data);
+    } catch (error) {
+      console.error("Error fetching chat logs:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchChatLogs();
+  }, []);
+
+  const handleChatSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await fetch("/chatlogForm", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -17,6 +33,8 @@ export default function Chat() {
         body: JSON.stringify({ chatContents }),
       });
       console.log("Chat submitted successfully!");
+      // 채팅이 제출되면 채팅 내역을 다시 가져옴
+      fetchChatLogs();
     } catch (error) {
       console.error("Error submitting chat:", error);
     }
@@ -32,6 +50,12 @@ export default function Chat() {
         />
         <button type="submit">submit</button>
       </form>
+      {/* 채팅 내역을 화면에 출력 */}
+      <div>
+        {chatLogs.map((log) => (
+          <div key={log.chatLogKey}>{log.chatContents}</div>
+        ))}
+      </div>
     </div>
   );
 }

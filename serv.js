@@ -106,6 +106,19 @@ app.prepare().then(() => {
       res.status(200).json({ message: "채팅 입력이 완료되었습니다." });
     });
   });
+
+  server.get("/chatlogs", (req, res) => {
+    const query = "SELECT * FROM chatlog";
+    connection.query(query, (err, results, fields) => {
+      if (err) {
+        console.error("Error fetching chatlogs:", err);
+        res.status(500).json({ message: "채팅 내역을 가져오는 데 실패했습니다." });
+        return;
+      }
+      res.status(200).json(results);
+    });
+  });
+  
   
 
   // Next.js 서버에 라우팅 위임
