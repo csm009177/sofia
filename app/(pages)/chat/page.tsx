@@ -41,7 +41,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col justify-between h-full w-screen overflow-hidden">
+    <div className="flex flex-col justify-between w-screen overflow-hidden">
       <form onSubmit={handleChatSubmit}>
         <input
           type="text"
@@ -51,7 +51,7 @@ export default function Chat() {
         <button type="submit">submit</button>
       </form>
       {/* 채팅 내역을 화면에 출력 */}
-      <div>
+      <div style={{ overflowY: "scroll", maxHeight: "400px" }}>
         {chatLogs.map((log) => (
           <div key={log.chatLogKey}>{log.chatContents}</div>
         ))}
