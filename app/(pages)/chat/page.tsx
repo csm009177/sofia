@@ -3,7 +3,7 @@
 // Chat 컴포넌트
 // Chat 컴포넌트
 import React, { useState, useEffect } from "react";
-import ChatLog from "../ui/Chatlog";
+import ChatLog from "../ui/ChatLog";
 
 export default function Chat() {
   const [chatContents, setChatContents] = useState("");
@@ -37,6 +37,7 @@ export default function Chat() {
       console.log("Chat submitted successfully!");
       // 채팅이 제출되면 채팅 내역을 다시 가져옴
       fetchChatLogs();
+      setChatContents(""); // 입력값 초기화
     } catch (error) {
       console.error("Error submitting chat:", error);
     }
