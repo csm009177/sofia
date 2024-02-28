@@ -70,6 +70,8 @@ app.prepare().then(() => {
 
   server.post("/chatlogForm", (req, res) => {
     const { chatContents, username } = req.body; // 클라이언트에서 보낸 username 정보를 받아옴
+    console.log("chatContents - ", chatContents);
+    console.log("username : ", username);
     const query = "INSERT INTO chatlog (chatContents, chatDate, username) VALUES (?, NOW(), ?)"; // username 정보를 함께 저장
     connection.query(query, [chatContents, username], (err, results, fields) => {
       if (err) {

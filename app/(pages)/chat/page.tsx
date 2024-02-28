@@ -68,7 +68,7 @@ export default function Chat() {
       console.error("Error submitting chat:", error);
     }
   };
-  
+
 
   return (
     <div className="flex flex-col justify-between w-screen overflow-hidden">
