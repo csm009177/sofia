@@ -6,8 +6,9 @@ import React, { useState, useEffect } from "react";
 export default function SignUp() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
-  const router = useRouter()
+  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -16,11 +17,11 @@ export default function SignUp() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ Identification: userId, pw: password }),
+        body: JSON.stringify({ id: userId, pw: password, username: username }),
       });
       const data = await response.json();
       setMessage(data.message);
-      router.push('/login')
+      router.push("/login");
     } catch (error) {
       console.error("Error signing up:", error);
       setMessage("회원가입 중 오류가 발생했습니다.");
@@ -46,6 +47,16 @@ export default function SignUp() {
           id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="username">사용자 이름:</label>
+        <input
+          type="text"
+          id="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           required
         />
       </div>

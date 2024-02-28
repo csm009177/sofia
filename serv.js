@@ -19,32 +19,6 @@ const connection = mysql.createConnection({
   port: 3306,
 });
 
-// // multer 설정
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, '../user/public'); // 이미지를 저장할 경로 설정
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, `${req.body.productName}.png`);
-//   },
-// });
-
-// const upload = multer({
-//   storage: storage,
-// });
-
-// // 카테고리 이미지추가 multer설정
-// const cateStorage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, '../user/public'); // 카테고리 이미지 저장 경로
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, `${req.body.category}.png`);
-//   },
-// });
-// const uploadCate = multer({
-//   storage : cateStorage
-// });
 
 app.prepare().then(() => {
   const server = express();
@@ -53,11 +27,11 @@ app.prepare().then(() => {
 
   // 회원가입 API 엔드포인트
   server.post("/signupForm", (req, res) => {
-    const { Identification, pw } = req.body;
+    const { id, pw, username } = req.body;
 
     // 회원가입 정보를 DB에 삽입
-    const query = "INSERT INTO users (id, pw) VALUES (?, ?)";
-    connection.query(query, [Identification, pw], (err, results, fields) => {
+    const query = "INSERT INTO users (id, pw, username) VALUES (?, ?, ?)";
+    connection.query(query, [id, pw, username], (err, results, fields) => {
       if (err) {
         console.error("Error signing up:", err);
         res.status(500).json({ message: "회원가입에 실패했습니다." });
@@ -69,11 +43,11 @@ app.prepare().then(() => {
 
   // 로그인 API 엔드포인트
   server.post("/loginForm", (req, res) => {
-    const { Identification, password } = req.body;
+    const { id, pw } = req.body;
 
     // 해당 사용자가 존재하는지 확인하는 쿼리
     const query = "SELECT * FROM users WHERE id = ? AND pw = ? ";
-    connection.query(query, [Identification, password], (err, results, fields) => {
+    connection.query(query, [id, pw], (err, results, fields) => {
       if (err) {
         console.error("Error logging in:", err);
         res.status(500).json({ message: "로그인에 실패했습니다." });
@@ -95,9 +69,11 @@ app.prepare().then(() => {
   });
 
   server.post("/chatlogForm", (req, res) => {
-    const { chatContents } = req.body;
-    const query = "INSERT INTO chatlog (chatContents, chatDate) VALUES (?, NOW())"; // chatDate를 추가하여 현재 날짜 저장
-    connection.query(query, [chatContents], (err, results, fields) => {
+    const { chatContents, username } = req.body; // 클라이언트에서 보낸 username 정보를 받아옴
+    console.log("chatContents - ", chatContents);
+    console.log("username : ", username);
+    const query = "INSERT INTO chatlog (chatContents, chatDate, username) VALUES (?, NOW(), ?)"; // username 정보를 함께 저장
+    connection.query(query, [chatContents, username], (err, results, fields) => {
       if (err) {
         console.error("Error chatlog Form :", err);
         res.status(500).json({ message: "채팅 입력에 실패했습니다." });
@@ -106,7 +82,7 @@ app.prepare().then(() => {
       res.status(200).json({ message: "채팅 입력이 완료되었습니다." });
     });
   });
-
+  
   server.get("/chatlogs", (req, res) => {
     const query = "SELECT * FROM chatlog";
     connection.query(query, (err, results, fields) => {
@@ -119,6 +95,13 @@ app.prepare().then(() => {
     });
   });
   
+  server.get("/getUserInfo", (req, res) => {
+    // 토큰에서 사용자 정보를 추출
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, secretKey);
+    const username = decodedToken.username;
+    res.status(200).json({ username });
+  });
   
 
   // Next.js 서버에 라우팅 위임
