@@ -22,7 +22,10 @@ const LoginButton = () => {
       {isLoggedIn ? (
         <button onClick={handleLogout}>logout</button>
       ) : (
-        <UrlButton url="/login" title="login"/>
+        <>
+          <UrlButton url="/login" title="login" />
+          <UrlButton url="signup" title="signup" />
+        </>
       )}
     </>
   );

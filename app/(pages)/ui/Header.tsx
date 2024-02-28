@@ -10,7 +10,7 @@ export default function Header() {
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
     setIsLoggedIn(!!token); // 토큰이 존재하면 true, 아니면 false로 설정
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <div className="flex flex-row w-screen h-48 justify-between">
@@ -21,7 +21,6 @@ export default function Header() {
       </div>
         <div className="flex flex-row h-24 w-1/6 p-5 justify-between">
           <LoginButton/>
-          <UrlButton url="signup" title="signup" />
         </div>
     </div>
   );
