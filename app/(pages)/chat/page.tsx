@@ -44,12 +44,21 @@ export default function Chat() {
   const handleChatSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("/getUserInfo", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const userData = await response.json();
+      const currentUser = userData.username;
+  
       await fetch("/chatlogForm", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ chatContents }),
+        body: JSON.stringify({ chatContents, username: currentUser }), // 현재 사용자의 username을 함께 보냄
       });
       console.log("Chat submitted successfully!");
       // 채팅이 제출되면 채팅 내역을 다시 가져옴
@@ -59,6 +68,7 @@ export default function Chat() {
       console.error("Error submitting chat:", error);
     }
   };
+  
 
   return (
     <div className="flex flex-col justify-between w-screen overflow-hidden">

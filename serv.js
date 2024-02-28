@@ -69,9 +69,9 @@ app.prepare().then(() => {
   });
 
   server.post("/chatlogForm", (req, res) => {
-    const { chatContents } = req.body;
-    const query = "INSERT INTO chatlog (chatContents, chatDate) VALUES (?, NOW())"; // chatDate를 추가하여 현재 날짜 저장
-    connection.query(query, [chatContents], (err, results, fields) => {
+    const { chatContents, username } = req.body; // 클라이언트에서 보낸 username 정보를 받아옴
+    const query = "INSERT INTO chatlog (chatContents, chatDate, username) VALUES (?, NOW(), ?)"; // username 정보를 함께 저장
+    connection.query(query, [chatContents, username], (err, results, fields) => {
       if (err) {
         console.error("Error chatlog Form :", err);
         res.status(500).json({ message: "채팅 입력에 실패했습니다." });
@@ -80,7 +80,7 @@ app.prepare().then(() => {
       res.status(200).json({ message: "채팅 입력이 완료되었습니다." });
     });
   });
-
+  
   server.get("/chatlogs", (req, res) => {
     const query = "SELECT * FROM chatlog";
     connection.query(query, (err, results, fields) => {
