@@ -37,8 +37,8 @@ export default function Chat() {
   };
 
   useEffect(() => {
-    fetchChatLogs();
     fetchUsername();
+    fetchChatLogs();
   }, []);
 
   const handleChatSubmit = async (e) => {
@@ -62,16 +62,19 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col justify-between w-screen overflow-hidden">
+      {username ? (<>
       <form onSubmit={handleChatSubmit}>
         <input
           type="text"
           value={chatContents}
           onChange={(e) => setChatContents(e.target.value)}
         />
-        <button type="submit">submit</button>
+      <button type="submit">submit</button>
       </form>
       {/* 채팅 내역을 화면에 출력하는 새로운 컴포넌트를 사용 */}
-      <ChatLog chatLogs={chatLogs} username={username} />
+      <ChatLog chatLogs={chatLogs} username={username} /> 
+      </>
+      ):( null )}
     </div>
   );
 }
