@@ -52,6 +52,7 @@ export default function Chat() {
       });
       const userData = await response.json();
       const currentUser = userData.username;
+      console.log(currentUser);
   
       await fetch("/chatlogForm", {
         method: "POST",
