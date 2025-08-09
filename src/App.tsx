@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { AppProvider } from './components/AppContext';
+import { Header } from './components/Header';
+import { HomePage } from './components/HomePage';
+import { SchedulePage } from './components/SchedulePage';
+import { AdminSchedulePage } from './components/AdminSchedulePage';
+import { HomeworkPage } from './components/HomeworkPage';
 
-function App() {
+export default function App() {
+  const [currentPage, setCurrentPage] = useState('home');
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'home':
+        return <HomePage />;
+      case 'schedule':
+        return <SchedulePage />;
+      case 'admin':
+        return <AdminSchedulePage />;
+      case 'homework':
+        return <HomeworkPage />;
+      default:
+        return <HomePage />;
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppProvider>
+      <div className="min-h-screen bg-background">
+        <Header currentPage={currentPage} onPageChange={setCurrentPage} />
+        <main className="min-h-[calc(100vh-4rem)]">
+          {renderPage()}
+        </main>
+      </div>
+    </AppProvider>
   );
 }
-
-export default App;
