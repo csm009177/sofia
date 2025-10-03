@@ -19,22 +19,26 @@ const serv = http.createServer((req, res) => {
       if (data) {
         res.end(data);
       } else {
-        res.end(console.log(err));
+        res.writeHead(404);
+        res.end("Page not found");
+        console.log(err);
       }
-      fs.readFile("public/favicon.ico", (err, data) => {
-        if (data) {
-          fs.writeFile("public/favicon-32x32.png", data, (err) => {
-            if (err) throw err;
-            console.log("Favicon saved!");
-          });
-        }
-      });
+    });
+  } else if (req.url === "/favicon.ico") {
+    fs.readFile("public/favicon.ico", (err, data) => {
+      if (data) {
+        res.writeHead(200, { 'Content-Type': 'image/x-icon' });
+        res.end(data);
+      } else {
+        res.writeHead(404);
+        res.end("Favicon not found");
+      }
     });
   } else if (req.url === "/components/render.js") {
     if (renderCache) {
       res.writeHead(200, { 
         'Content-Type': 'application/javascript',
-        'Cache-Control': 'public, max-age=3600' // 1시간 캐싱
+        'Cache-Control': 'public, max-age=3600'
       });
       res.end(renderCache);
     } else {
@@ -46,7 +50,9 @@ const serv = http.createServer((req, res) => {
       if (data) {
         res.end(data);
       } else {
-        res.end(console.log(err));
+        res.writeHead(404);
+        res.end("Page not found");
+        console.log(err);
       }
     });
   } else if (req.url === "/homework") {
@@ -54,7 +60,9 @@ const serv = http.createServer((req, res) => {
       if (data) {
         res.end(data);
       } else {
-        res.end(console.log(err));
+        res.writeHead(404);
+        res.end("Page not found");
+        console.log(err);
       }
     });
   } else if (req.url === "/8month") {
@@ -62,9 +70,14 @@ const serv = http.createServer((req, res) => {
       if (data) {
         res.end(data);
       } else {
-        res.end(console.log(err));
+        res.writeHead(404);
+        res.end("Page not found");
+        console.log(err);
       }
     });
+  } else {
+    res.writeHead(404);
+    res.end("Not Found");
   }
 });
 
