@@ -24,10 +24,23 @@ const serv = http.createServer((req, res) => {
         console.log(err);
       }
     });
-  } else if (req.url === "/favicon.ico") {
+  } 
+  else if(req.url === "/components/header.js"){
+    fs.readFile("components/header.js", (err, data) => {
+      if (data) {
+        res.writeHead(200, { "Content-Type": "application/javascript" });
+        res.end(data);
+      } else {
+        res.writeHead(404);
+        res.end("File not found");
+        console.log(err);
+      }
+    });
+  }
+  else if (req.url === "/favicon.ico") {
     fs.readFile("public/favicon.ico", (err, data) => {
       if (data) {
-        res.writeHead(200, { 'Content-Type': 'image/x-icon' });
+        res.writeHead(200, { "Content-Type": "image/x-icon" });
         res.end(data);
       } else {
         res.writeHead(404);
@@ -36,9 +49,9 @@ const serv = http.createServer((req, res) => {
     });
   } else if (req.url === "/components/render.js") {
     if (renderCache) {
-      res.writeHead(200, { 
-        'Content-Type': 'application/javascript',
-        'Cache-Control': 'public, max-age=3600'
+      res.writeHead(200, {
+        "Content-Type": "application/javascript",
+        "Cache-Control": "public, max-age=3600",
       });
       res.end(renderCache);
     } else {
