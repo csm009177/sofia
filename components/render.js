@@ -1,4 +1,4 @@
-class 요소 {
+export class 요소 {
   constructor(
     부모클래스,
     클래스명,
@@ -33,3 +33,6 @@ class 요소 {
   }
 }
 const 뿌리 = document.getElementById("root");
+
+
+window.요소 = 요소;

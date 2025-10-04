@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            color:white;
+            color: white;
         }
 
         #root {
@@ -21,18 +21,18 @@
             padding: 0;
             display: flex;
             flex-direction: column;
-            justify-content: center;                        
+            justify-content: center;
         }
     </style>
 </head>
 
 <body>
     <div id="root"></div>
-    <script src="../components/render.js"></script>
-    <script src="../components/header.js"></script>
-    <script src="../components/main.js"></script>
-    <script src="../components/footer.js"></script>
-    <script>
+    <script type="module">
+        import { 헤더생성 } from '../components/header.js';  // 내부에서 render.js import됨
+        import { 메인생성 } from '../components/main.js';    // 내부에서 render.js import됨
+        import { 푸터생성 } from '../components/footer.js';  // 내부에서 render.js import됨
+
         헤더생성();
         메인생성();
         푸터생성();

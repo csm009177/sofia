@@ -1,4 +1,6 @@
-function 헤더생성(){
+import { 요소 } from './render.js';  
+
+export function 헤더생성(){
     new 요소('root', '헤더', 'div', 'rgba(50, 50, 50, 255)', '100vw', '5vh', '', { style: 'display:flex; justify-content:space-between; align-items:center;' });
         new 요소('헤더', '홈버튼', 'button', 'rgba(55, 55, 55, 255)', '10vw', '5vh', 'home', { style: 'display:flex; justify-content:center; align-items:center;', onclick: 'location.href="/"' });
         new 요소('헤더', '보드메뉴', 'div', 'rgba(55, 55, 55, 255)', 'auto', 'auto', '', { style: 'display:flex; justify-content:center; align-items:center;' });
