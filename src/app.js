@@ -10,7 +10,7 @@ const fileCache = {
   header: null,
   main: null,
   footer: null,
-  calendar: null  // calendar 추가
+  calendar: null, // calendar 추가
 };
 
 // 서버 시작시 컴포넌트 파일들을 메모리에 로드
@@ -20,7 +20,7 @@ function loadComponentsToCache() {
     { key: "header", path: "components/header.js" },
     { key: "main", path: "components/main.js" },
     { key: "footer", path: "components/footer.js" },
-    { key: "calendar", path: "components/main/calendar.js" }  // calendar 추가!
+    { key: "calendar", path: "components/main/calendar.js" }, // calendar 추가!
   ];
 
   componentsToCache.forEach(({ key, path }) => {
@@ -49,8 +49,18 @@ const serv = http.createServer((req, res) => {
         console.log(err);
       }
     });
-  } 
-  else if (req.url === "/components/header.js") {
+  } else if (req.url === "/components/render.js") {
+    if (fileCache.render) {
+      res.writeHead(200, {
+        "Content-Type": "application/javascript",
+        "Cache-Control": "public, max-age=86400",
+      });
+      res.end(fileCache.render);
+    } else {
+      res.writeHead(404);
+      res.end("File not found");
+    }
+  } else if (req.url === "/components/header.js") {
     if (fileCache.header) {
       res.writeHead(200, {
         "Content-Type": "application/javascript",
@@ -61,8 +71,7 @@ const serv = http.createServer((req, res) => {
       res.writeHead(404);
       res.end("File not found");
     }
-  } 
-  else if (req.url === "/components/footer.js") {
+  } else if (req.url === "/components/footer.js") {
     if (fileCache.footer) {
       res.writeHead(200, {
         "Content-Type": "application/javascript",
@@ -73,8 +82,7 @@ const serv = http.createServer((req, res) => {
       res.writeHead(404);
       res.end("File not found");
     }
-  } 
-  else if (req.url === "/components/main.js") {
+  } else if (req.url === "/components/main.js") {
     if (fileCache.main) {
       res.writeHead(200, {
         "Content-Type": "application/javascript",
@@ -99,18 +107,7 @@ const serv = http.createServer((req, res) => {
       res.end("File not found");
     }
   }
-  else if (req.url === "/components/render.js") {
-    if (fileCache.render) {
-      res.writeHead(200, {
-        "Content-Type": "application/javascript",
-        "Cache-Control": "public, max-age=86400",
-      });
-      res.end(fileCache.render);
-    } else {
-      res.writeHead(404);
-      res.end("File not found");
-    }
-  }
+
   // ... 나머지 라우팅
   else {
     res.writeHead(404);
