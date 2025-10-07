@@ -162,28 +162,26 @@ export function 캘린더생성2(){
     const currentMonth = now.getMonth(); // 0부터 시작 (0=1월, 1=2월...)
     const currentDate = now.getDate();
     const currentDay = now.getDay(); // 0=일요일, 1=월요일...
+    const dayNamesKor = ['일', '월', '화', '수', '목', '금', '토'];
+    const dayNamesEng = ['sun', 'mon', 'tue', 'wed', 'thr', 'fri', 'sat'];
     console.log(currentYear, currentMonth, currentDate, currentDay);
 
-
-    new 요소('root', '메인', 'div', 'rgba(50, 50, 50, 255)', '100vw', '90vh', '', { style: 'display:flex; justify-content:auto; align-items:center;' });
         new 요소('메인', '켈린더', 'div', 'rgba(55, 55, 55, 255)', '70vw', '90vh', '', { style: 'display:block; justify-content:center; align-items:center;' });
-        new 요소('켈린더', '월별', 'div', 'rgba(55, 55, 55, 255)', '70vw', '10%', `test${currentYear}년 ${currentMonth + 1}월`, { style: 'display:flex; justify-content:center; align-items:center;', onclick: 'location.href="/8month"' });
+        new 요소('켈린더', '월별', 'div', 'rgba(55, 55, 55, 255)', '70vw', '10%', `${currentYear}년 ${currentMonth + 1}월`, { style: 'display:flex; justify-content:center; align-items:center;', onclick: 'location.href="/8month"' });
         new 요소('켈린더', '요일', 'div', 'rgba(55, 55, 55, 255)', 'auto', '15%', '', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('요일', '일', 'div', 'rgba(55, 55, 55, 255)', '10vw', '100%', 'sun', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('요일', '월', 'div', 'rgba(55, 55, 55, 255)', '10vw', '100%', 'mon', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('요일', '화', 'div', 'rgba(55, 55, 55, 255)', '10vw', '100%', 'tue', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('요일', '수', 'div', 'rgba(55, 55, 55, 255)', '10vw', '100%', 'wed', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('요일', '목', 'div', 'rgba(55, 55, 55, 255)', '10vw', '100%', 'thr', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('요일', '금', 'div', 'rgba(55, 55, 55, 255)', '10vw', '100%', 'fri', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('요일', '토', 'div', 'rgba(55, 55, 55, 255)', '10vw', '100%', 'sat', { style: 'display:flex; justify-content:center; align-items:center;'});
+            for (let i = 0; i < 7; i++) {
+                new 요소('요일', dayNamesKor[i], 'div', 'rgba(55, 55, 55, 255)', '10vw', '100%', dayNamesEng[i], { 
+                    style: 'display:flex; justify-content:center; align-items:center;'
+                });
+            }
         new 요소('켈린더', '첫째주', 'div', 'rgba(55, 55, 55, 255)', 'auto', '15%', '', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '1', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '2', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '3', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '4', { style: 'display:flex; justify-content:center; align-items:center;'});
-            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '5', { style: 'display:flex; justify-content:center; align-items:center;'});
+            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '', { style: 'display:flex; justify-content:flex-end; align-items:flex-start;'});
+            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '', { style: 'display:flex; justify-content:flex-end; align-items:flex-start;'});
+            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '1', {style: 'display:flex; justify-content:flex-end; align-items:flex-start;'});
+            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '2', {style: 'display:flex; justify-content:flex-end; align-items:flex-start;'});
+            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '3', {style: 'display:flex; justify-content:flex-end; align-items:flex-start;'});
+            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '4', {style: 'display:flex; justify-content:flex-end; align-items:flex-start;'});
+            new 요소('첫째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '5', {style: 'display:flex; justify-content:flex-end; align-items:flex-start;'});
         new 요소('켈린더', '둘째주', 'div', 'rgba(55, 55, 55, 255)', 'auto', '15%', '', { style: 'display:flex; justify-content:center; align-items:center;'});
             new 요소('둘째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '6', { style: 'display:flex; justify-content:center; align-items:center;'});
             new 요소('둘째주', '', 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', '7', { style: 'display:flex; justify-content:center; align-items:center;'});
