@@ -10,7 +10,8 @@ const fileCache = {
   header: null,
   main: null,
   footer: null,
-  calendar: null, // calendar 추가
+  calendar: null,
+  favicon: null // favicon 추가
 };
 
 // 서버 시작시 컴포넌트 파일들을 메모리에 로드
@@ -20,7 +21,7 @@ function loadComponentsToCache() {
     { key: "header", path: "components/header.js" },
     { key: "main", path: "components/main.js" },
     { key: "footer", path: "components/footer.js" },
-    { key: "calendar", path: "components/main/calendar.js" }, // calendar 추가!
+    { key: "calendar", path: "components/main/calendar.js" },
   ];
 
   componentsToCache.forEach(({ key, path }) => {
@@ -32,6 +33,16 @@ function loadComponentsToCache() {
         console.log(`Failed to cache ${path}:`, err.message);
       }
     });
+  });
+
+  // favicon 별도 로드 (바이너리 파일)
+  fs.readFile("public/favicon.ico", (err, data) => {
+    if (!err) {
+      fileCache.favicon = data;
+      console.log("favicon.ico cached in memory");
+    } else {
+      console.log("Failed to cache favicon.ico:", err.message);
+    }
   });
 }
 
@@ -49,7 +60,22 @@ const serv = http.createServer((req, res) => {
         console.log(err);
       }
     });
-  } else if (req.url === "/components/render.js") {
+  } 
+  // favicon 라우터 추가
+  else if (req.url === "/favicon.ico") {
+    if (fileCache.favicon) {
+      res.writeHead(200, {
+        "Content-Type": "image/x-icon",
+        "Cache-Control": "public, max-age=86400", // 24시간 캐시
+      });
+      res.end(fileCache.favicon);
+    } else {
+      // favicon이 없으면 빈 응답 (404 대신)
+      res.writeHead(204); // No Content
+      res.end();
+    }
+  }
+  else if (req.url === "/components/render.js") {
     if (fileCache.render) {
       res.writeHead(200, {
         "Content-Type": "application/javascript",
@@ -60,7 +86,9 @@ const serv = http.createServer((req, res) => {
       res.writeHead(404);
       res.end("File not found");
     }
-  } else if (req.url === "/components/header.js") {
+  } 
+  // ... 기존 라우터들 ...
+  else if (req.url === "/components/header.js") {
     if (fileCache.header) {
       res.writeHead(200, {
         "Content-Type": "application/javascript",
@@ -71,7 +99,8 @@ const serv = http.createServer((req, res) => {
       res.writeHead(404);
       res.end("File not found");
     }
-  } else if (req.url === "/components/footer.js") {
+  } 
+  else if (req.url === "/components/footer.js") {
     if (fileCache.footer) {
       res.writeHead(200, {
         "Content-Type": "application/javascript",
@@ -82,7 +111,8 @@ const serv = http.createServer((req, res) => {
       res.writeHead(404);
       res.end("File not found");
     }
-  } else if (req.url === "/components/main.js") {
+  } 
+  else if (req.url === "/components/main.js") {
     if (fileCache.main) {
       res.writeHead(200, {
         "Content-Type": "application/javascript",
@@ -94,7 +124,6 @@ const serv = http.createServer((req, res) => {
       res.end("File not found");
     }
   }
-  // calendar.js 라우팅 추가!
   else if (req.url === "/components/main/calendar.js") {
     if (fileCache.calendar) {
       res.writeHead(200, {
@@ -107,8 +136,6 @@ const serv = http.createServer((req, res) => {
       res.end("File not found");
     }
   }
-
-  // ... 나머지 라우팅
   else {
     res.writeHead(404);
     res.end("Not Found");
