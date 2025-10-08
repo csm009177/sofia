@@ -58,10 +58,8 @@ export function 캘린더생성2(){
     
     // 6주 생성 (대부분의 월은 6주 안에 들어감)
     for (let week = 0; week < 6; week++) {
-        const weekNames = ['첫째주', '둘째주', '셋째주', '넷째주', '다섯째주', '여섯째주'];
-        const weekId = weekNames[week];
-        
-        new 요소('켈린더', weekId, 'div', 'rgba(55, 55, 55, 255)', 'auto', '12.5%', '', { 
+
+        new 요소('켈린더', `주${week + 1}`, 'div', 'rgba(55, 55, 55, 255)', 'auto', '12.5%', '', {
             style: 'display:flex; justify-content:center; align-items:center;'
         });
         
