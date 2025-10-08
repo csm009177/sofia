@@ -1,156 +1,166 @@
-import { 요소 } from '../render.js';  // ← 경로 수정 (../../components/render.js → ../render.js)
+import { 요소 } from '../render.js';
 
-export function 캘린더생성2(){
-    // 현재 날짜 정보 가져오기
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth(); // 0부터 시작 (0=1월, 1=2월...)
-    const currentDate = now.getDate();
-    console.log(currentYear, currentMonth, currentDate);
-    // 월 이름 배열
-    const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', 
-                       '7월', '8월', '9월', '10월', '11월', '12월'];
+export function 캘린더생성(년도 = null, 월 = null){
+    // 매개변수가 없으면 현재 날짜 사용
+    const 현재 = new Date();
+    const 타겟연도 = 년도 || 현재.getFullYear();
+    const 타겟월 = 월 !== null ? 월 : 현재.getMonth();
+    const 현재일 = 현재.getDate();
     
-    // 요일 배열
-    const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+    console.log(`${타겟연도}년 ${타겟월 + 1}월 캘린더 생성`);
     
-    // 해당 월의 첫 번째 날과 마지막 날 구하기
-    const firstDay = new Date(currentYear, currentMonth, 1);
-    const lastDay = new Date(currentYear, currentMonth + 1, 0);
-    // 해당 월의 총 일수 구하기
-    const daysInMonth = lastDay.getDate();
-    // 해당 월의 첫 번째 날의 요일 구하기
-    const startDayOfWeek = firstDay.getDay(); // 0=일요일, 1=월요일...
+    // 기존 캘린더 제거
+    const 기존캘린더 = document.querySelector('.켈린더');
+    if (기존캘린더) {
+        기존캘린더.remove();
+    }
     
-    // 이전 달의 마지막 날들도 계산
-    const prevMonth = new Date(currentYear, currentMonth, 0);
-    const prevMonthDays = prevMonth.getDate();
+    // 날짜 계산
+    const 해당월의첫째날 = new Date(타겟연도, 타겟월, 1);
+    const 해당월의마지막날 = new Date(타겟연도, 타겟월 + 1, 0);
+    const 해당월의총일수 = 해당월의마지막날.getDate();
+    const 해당월의첫째날요일 = 해당월의첫째날.getDay();
     
-    // 캘린더 컨테이너 생성
+    // 이전 달 계산
+    const 이전달 = new Date(타겟연도, 타겟월, 0);
+    const 이전달의총일수 = 이전달.getDate();
+    const 이전달의마지막주날들 = 이전달의총일수 - 해당월의첫째날요일 + 1;
+    
+    // 요일명
+    const 국문요일명 = ['일', '월', '화', '수', '목', '금', '토'];
+    
+    // 달력 컨테이너 생성
     new 요소('메인', '켈린더', 'div', 'rgba(55, 55, 55, 255)', '70vw', '90vh', '', { 
-        style: 'display:block; justify-content:center; align-items:center;'
+        style: 'display:block; justify-content:center; align-items:center; position:relative;' 
     });
     
-    // 월별 표시 (현재 월 동적 표시)
-    const monthDisplayText = `${currentYear}년 ${monthNames[currentMonth]}`;
-    new 요소('켈린더', '월별', 'div', 'rgba(55, 55, 55, 255)', '70vw', '10%', monthDisplayText, { 
-        style: 'display:flex; justify-content:center; align-items:center; font-size: 1.2em; font-weight: bold;', 
-        onclick: `location.href="/${currentMonth + 1}month"` 
+    // 헤더 영역 (월 표시 + 네비게이션)
+    new 요소('켈린더', '헤더영역', 'div', 'rgba(60, 60, 60, 255)', '70vw', '10%', '', { 
+        style: 'display:flex; justify-content:space-between; align-items:center; position:relative;' 
+    });
+    
+    // 이전 달 버튼
+    new 요소('헤더영역', '이전달버튼', 'button', 'rgba(70, 70, 70, 255)', '60px', '40px', '◀', { 
+        style: 'display:flex; justify-content:center; align-items:center; border:none; color:white; cursor:pointer; border-radius:5px;',
+        onclick: `이전달보기(${타겟연도}, ${타겟월})`
+    });
+    
+    // 월 표시
+    new 요소('헤더영역', '월별', 'div', 'rgba(55, 55, 55, 255)', 'auto', '100%', `${타겟연도}년 ${타겟월 + 1}월`, { 
+        style: 'display:flex; justify-content:center; align-items:center; font-size:20px; font-weight:bold;' 
+    });
+    
+    // 다음 달 버튼
+    new 요소('헤더영역', '다음달버튼', 'button', 'rgba(70, 70, 70, 255)', '60px', '40px', '▶', { 
+        style: 'display:flex; justify-content:center; align-items:center; border:none; color:white; cursor:pointer; border-radius:5px;',
+        onclick: `다음달보기(${타겟연도}, ${타겟월})`
     });
     
     // 요일 헤더 생성
-    new 요소('켈린더', '요일', 'div', 'rgba(55, 55, 55, 255)', 'auto', '15%', '', { 
+    new 요소('켈린더', '요일', 'div', 'rgba(55, 55, 55, 255)', 'auto', '10%', '', { 
         style: 'display:flex; justify-content:center; align-items:center;'
     });
     
-    dayNames.forEach((day, index) => {
-        const dayStyle = index === 0 ? 'display:flex; justify-content:center; align-items:center; color: #ff6b6b;' : // 일요일은 빨간색
-                         index === 6 ? 'display:flex; justify-content:center; align-items:center; color: #4dabf7;' : // 토요일은 파란색
-                         'display:flex; justify-content:center; align-items:center;';
-        new 요소('요일', `요일${index}`, 'div', 'rgba(55, 55, 55, 255)', '10vw', '100%', day, { 
-            style: dayStyle 
-        });
+    // 요일들 생성
+    국문요일명.forEach((day, index) => {
+        const dayStyle = 
+            index === 0 ? 'display:flex; justify-content:center; align-items:center; color: #ff6b6b; font-weight:bold;' 
+            : index === 6 ? 'display:flex; justify-content:center; align-items:center; color: #4dabf7; font-weight:bold;' 
+            : 'display:flex; justify-content:center; align-items:center; font-weight:bold;';
+
+        new 요소('요일', `요일${index}`, 'div', 'rgba(55, 55, 55, 255)', '10vw', '100%', day, { style: dayStyle });
     });
     
     // 캘린더 날짜 생성
-    let dateCounter = 1;
-    let nextMonthCounter = 1;
+    let 날짜카운터 = 1;
+    let 다음달카운터 = 1;
+    let 전체카운터 = 0;
     
-    // 6주 생성 (대부분의 월은 6주 안에 들어감)
-    for (let week = 0; week < 6; week++) {
-
-        new 요소('켈린더', `주${week + 1}`, 'div', 'rgba(55, 55, 55, 255)', 'auto', '12.5%', '', {
+    // 6주 생성
+    for(let week = 0; week < 6; week++){
+        new 요소('켈린더', `${week+1}주`, 'div', 'rgba(55, 55, 55, 255)', 'auto', '13.3%', '', { 
             style: 'display:flex; justify-content:center; align-items:center;'
         });
-        
+
         // 각 주의 7일 생성
-        for (let day = 0; day < 7; day++) {
-            let dateText = '';
-            let buttonStyle = 'display:flex; justify-content:center; align-items:center; border: none; cursor: pointer; background-color: rgba(55, 55, 55, 255);';
-            let isCurrentMonth = false;
-            let actualDate = 0;
+        for(let day = 0; day < 7; day++){
+            let 표시할날짜 = '';
+            let 버튼스타일 = 'display:flex; justify-content:center; align-items:center; border:none; cursor:pointer; border-radius:3px; transition:background-color 0.2s;';
+            let 배경색 = 'rgba(55, 55, 55, 255)';
             
-            // 첫 번째 주에서 이전 달 날짜들
-            if (week === 0 && day < startDayOfWeek) {
-                dateText = (prevMonthDays - startDayOfWeek + day + 1).toString();
-                buttonStyle += ' color: #666; opacity: 0.5;';
-            }
-            // 현재 달 날짜들
-            else if (dateCounter <= daysInMonth) {
-                dateText = dateCounter.toString();
-                actualDate = dateCounter;
-                isCurrentMonth = true;
+            if (전체카운터 < 해당월의첫째날요일) {
+                // 이전 달의 날짜들
+                표시할날짜 = 이전달의마지막주날들 + 전체카운터;
+                버튼스타일 += 'opacity:0.3; color:#888;';
+                배경색 = 'rgba(45, 45, 45, 255)';
+            } else if (날짜카운터 <= 해당월의총일수) {
+                // 현재 달의 날짜들
+                표시할날짜 = 날짜카운터;
                 
-                // 오늘 날짜 강조
-                if (dateCounter === currentDate) {
-                    buttonStyle += ' background-color: rgba(100, 150, 255, 255); color: white; font-weight: bold; border-radius: 50%;';
-                }
-                
-                // 주말 색상 적용
-                if (day === 0) { // 일요일
-                    buttonStyle += ' color: #ff6b6b;';
-                } else if (day === 6) { // 토요일
-                    buttonStyle += ' color: #4dabf7;';
+                // 오늘 날짜 강조 (현재 보고 있는 달이 실제 현재 달일 때만)
+                if (타겟연도 === 현재.getFullYear() && 타겟월 === 현재.getMonth() && 날짜카운터 === 현재일) {
+                    배경색 = 'rgba(100, 150, 255, 255)';
+                    버튼스타일 += 'color:white; font-weight:bold; box-shadow: 0 0 10px rgba(100, 150, 255, 0.5);';
                 } else {
-                    buttonStyle += ' color: white;';
+                    // 주말 색상
+                    if (day === 0) { // 일요일
+                        버튼스타일 += 'color: #ff6b6b;';
+                    } else if (day === 6) { // 토요일
+                        버튼스타일 += 'color: #4dabf7;';
+                    } else {
+                        버튼스타일 += 'color: white;';
+                    }
                 }
                 
-                dateCounter++;
-            }
-            // 다음 달 날짜들
-            else {
-                dateText = nextMonthCounter.toString();
-                buttonStyle += ' color: #666; opacity: 0.5;';
-                nextMonthCounter++;
-            }
-            
-            // 클릭 이벤트 생성
-            let clickEvent = '';
-            if (isCurrentMonth) {
-                clickEvent = `alert('${currentYear}년 ${monthNames[currentMonth]} ${actualDate}일 선택됨')`;
+                // 호버 효과
+                버튼스타일 += ':hover { background-color: rgba(80, 80, 80, 255); }';
+                
+                날짜카운터++;
+            } else {
+                // 다음 달의 날짜들
+                표시할날짜 = 다음달카운터;
+                다음달카운터++;
+                버튼스타일 += 'opacity:0.3; color:#888;';
+                배경색 = 'rgba(45, 45, 45, 255)';
             }
             
-            new 요소(weekId, `day${week}_${day}`, 'button', 'rgba(55, 55, 55, 255)', '10vw', '100%', dateText, { 
-                style: buttonStyle,
-                onclick: clickEvent
+            new 요소(`${week+1}주`, `day${week}_${day}`, 'button', 배경색, '10vw', '100%', 표시할날짜, { 
+                style: 버튼스타일
             });
+            
+            전체카운터++;
         }
         
-        // 모든 날짜를 표시했고 다음 달 날짜도 충분히 표시했으면 종료
-        if (dateCounter > daysInMonth && nextMonthCounter > 7) break;
+        // 모든 날짜를 표시했으면 루프 종료
+        if (날짜카운터 > 해당월의총일수 && 다음달카운터 > 7) break;
+    }
+}
+
+// 이전/다음 달 보기 함수들
+function 이전달보기(현재년도, 현재월) {
+    let 새년도 = 현재년도;
+    let 새월 = 현재월 - 1;
+    
+    if (새월 < 0) {
+        새월 = 11;
+        새년도--;
     }
     
-    // 할일 목록 섹션
-    new 요소('메인', '할일목록', 'div', 'rgba(55, 55, 55, 255)', '30vw', '90vh', '', { 
-        style: 'display:block; justify-content:center; align-items:center; padding: 10px;'
-    });
-    
-    // 할일 목록 헤더
-    new 요소('할일목록', '할일헤더', 'div', 'rgba(60, 60, 60, 255)', '100%', '8%', '오늘의 할 일', { 
-        style: 'display:flex; justify-content:center; align-items:center; font-weight: bold; margin-bottom: 10px;'
-    });
-    
-    // 할일 목록 아이템들
-    const todoItems = [
-        '프로젝트 완료하기',
-        '회의 참석하기',
-        '문서 작성하기',
-        '코드 리뷰하기'
-    ];
-    
-    todoItems.forEach((item, index) => {
-        const todoId = `할일${index + 1}`;
-        new 요소('할일목록', todoId, 'div', 'rgba(65, 65, 65, 255)', '95%', '12%', '', { 
-            style: 'display:flex; justify-content:space-between; align-items:center; margin: 5px; padding: 10px; border-radius: 5px;'
-        });
-        
-        new 요소(todoId, `텍스트${index}`, 'span', 'transparent', 'auto', 'auto', item, { 
-            style: 'flex: 1; text-align: left;'
-        });
-        
-        new 요소(todoId, `완료버튼${index}`, 'button', 'rgba(70, 130, 180, 255)', '60px', '30px', '완료', { 
-            style: 'display:flex; justify-content:center; align-items:center; border: none; border-radius: 3px; cursor: pointer;',
-            onclick: `alert('${item} 완료!')`
-        });
-    });
+    캘린더생성(새년도, 새월);
 }
+
+function 다음달보기(현재년도, 현재월) {
+    let 새년도 = 현재년도;
+    let 새월 = 현재월 + 1;
+    
+    if (새월 > 11) {
+        새월 = 0;
+        새년도++;
+    }
+    
+    캘린더생성(새년도, 새월);
+}
+
+// 전역 함수로 등록 (onclick에서 사용)
+window.이전달보기 = 이전달보기;
+window.다음달보기 = 다음달보기;
