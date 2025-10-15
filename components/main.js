@@ -1,6 +1,8 @@
 import { 요소 } from './render.js';
-import { 캘린더생성 } from './main/calendar.js';
-// import { 캘린더생성2 } from './main/calendar2.js';
+// import { 캘린더생성 } from './main/calendar_ref.js';
+// import { 캘린더생성 } from './main/calendar.js';
+import { 캘린더생성 } from './main/calendar2.js';
+
 
 export function 메인생성(){
     // 메인 컨테이너 생성
