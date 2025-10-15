@@ -2,7 +2,7 @@ import { 요소 } from '../render.js';
 
 export function 캘린더생성(년도 = null, 월 = null){
     // 매개변수가 없으면 현재 날짜 사용
-    const 현재 = new Date(); // 로컬참조 
+    const 현재 = new Date();
     const 타겟연도 = 년도 || 현재.getFullYear();
     const 타겟월 = 월 !== null ? 월 : 현재.getMonth();
     const 현재일 = 현재.getDate();
@@ -15,18 +15,39 @@ export function 캘린더생성(년도 = null, 월 = null){
         기존캘린더.remove();
     }
     
-    // 날짜 계산
-    const 해당월의첫째날 = new Date(타겟연도, 타겟월, 1);
-    const 해당월의마지막날 = new Date(타겟연도, 타겟월 + 1, 0);
-    const 해당월의총일수 = 해당월의마지막날.getDate();
-    const 해당월의첫째날요일 = 해당월의첫째날.getDay();
+    // 🎯 이전달의 마지막 일요일부터 시작하는 날짜 계산
+    const 해당월첫날 = new Date(타겟연도, 타겟월, 1);
+    const 해당월첫날요일 = 해당월첫날.getDay(); // 0=일요일
     
-    // 이전 달 계산
-    const 이전달 = new Date(타겟연도, 타겟월, 0);
-    const 이전달의총일수 = 이전달.getDate();
-    const 이전달의마지막주날들 = 이전달의총일수 - 해당월의첫째날요일 + 1;
+    // 캘린더 시작 날짜 = 이전달의 마지막 일요일
+    const 캘린더시작날 = new Date(타겟연도, 타겟월, 1 - 해당월첫날요일);
     
-    // 요일명
+    console.log(`캘린더 시작일: ${캘린더시작날.getFullYear()}년 ${캘린더시작날.getMonth() + 1}월 ${캘린더시작날.getDate()}일`);
+    
+    // 6주 x 7일 = 42일간의 날짜 배열 생성
+    const 달력데이터 = [];
+    
+    for(let i = 0; i < 42; i++) {
+        const 현재날짜 = new Date(캘린더시작날);
+        현재날짜.setDate(캘린더시작날.getDate() + i);
+        
+        const 날짜정보 = {
+            년도: 현재날짜.getFullYear(),
+            월: 현재날짜.getMonth(),
+            일: 현재날짜.getDate(),
+            요일: 현재날짜.getDay(),
+            타입: 현재날짜.getMonth() === 타겟월 ? '현재달' : 
+                  현재날짜.getMonth() < 타겟월 ? '이전달' : '다음달'
+        };
+        
+        달력데이터.push(날짜정보);
+    }
+    
+    // DOM 생성
+    달력DOM생성(달력데이터, 타겟연도, 타겟월, 현재);
+}
+
+function 달력DOM생성(달력데이터, 타겟연도, 타겟월, 현재) {
     const 국문요일명 = ['일', '월', '화', '수', '목', '금', '토'];
     
     // 달력 컨테이너 생성
@@ -71,12 +92,7 @@ export function 캘린더생성(년도 = null, 월 = null){
         new 요소('요일', `요일${index}`, 'div', 'rgba(55, 55, 55, 255)', '10vw', '100%', day, { style: dayStyle });
     });
     
-    // 캘린더 날짜 생성
-    let 날짜카운터 = 1;
-    let 다음달카운터 = 1;
-    let 전체카운터 = 0;
-    
-    // 6주 생성
+    // 🎯 간단해진 날짜 생성 로직
     for(let week = 0; week < 6; week++){
         new 요소('켈린더', `${week+1}주`, 'div', 'rgba(55, 55, 55, 255)', 'auto', '13.3%', '', { 
             style: 'display:flex; justify-content:center; align-items:center;'
@@ -84,28 +100,27 @@ export function 캘린더생성(년도 = null, 월 = null){
 
         // 각 주의 7일 생성
         for(let day = 0; day < 7; day++){
-            let 표시할날짜 = '';
-            let 버튼스타일 = 'display:flex; justify-content:center; align-items:center; border:none; cursor:pointer; border-radius:3px; transition:background-color 0.2s;';
-            let 배경색 = 'rgba(55, 55, 55, 255)';
+            const 인덱스 = week * 7 + day;
+            const 날짜정보 = 달력데이터[인덱스];
             
-            if (전체카운터 < 해당월의첫째날요일) {
-                // 이전 달의 날짜들
-                표시할날짜 = 이전달의마지막주날들 + 전체카운터;
-                버튼스타일 += 'opacity:0.3; color:#888;';
-                배경색 = 'rgba(45, 45, 45, 255)';
-            } else if (날짜카운터 <= 해당월의총일수) {
-                // 현재 달의 날짜들
-                표시할날짜 = 날짜카운터;
+            // 스타일 계산
+            let 배경색 = 'rgba(55, 55, 55, 255)';
+            let 버튼스타일 = 'display:flex; justify-content:center; align-items:center; border:none; cursor:pointer; border-radius:3px; transition:background-color 0.2s;';
+            
+            if (날짜정보.타입 === '현재달') {
+                // 현재 달 날짜
                 
-                // 오늘 날짜 강조 (현재 보고 있는 달이 실제 현재 달일 때만)
-                if (타겟연도 === 현재.getFullYear() && 타겟월 === 현재.getMonth() && 날짜카운터 === 현재일) {
+                // 오늘 날짜 강조
+                if (날짜정보.년도 === 현재.getFullYear() && 
+                    날짜정보.월 === 현재.getMonth() && 
+                    날짜정보.일 === 현재.getDate()) {
                     배경색 = 'rgba(100, 150, 255, 255)';
                     버튼스타일 += 'color:white; font-weight:bold; box-shadow: 0 0 10px rgba(100, 150, 255, 0.5);';
                 } else {
-                    // 주말 색상
-                    if (day === 0) { // 일요일
+                    // 요일별 색상
+                    if (날짜정보.요일 === 0) { // 일요일
                         버튼스타일 += 'color: #ff6b6b;';
-                    } else if (day === 6) { // 토요일
+                    } else if (날짜정보.요일 === 6) { // 토요일
                         버튼스타일 += 'color: #4dabf7;';
                     } else {
                         버튼스타일 += 'color: white;';
@@ -115,24 +130,28 @@ export function 캘린더생성(년도 = null, 월 = null){
                 // 호버 효과
                 버튼스타일 += ':hover { background-color: rgba(80, 80, 80, 255); }';
                 
-                날짜카운터++;
             } else {
-                // 다음 달의 날짜들
-                표시할날짜 = 다음달카운터;
-                다음달카운터++;
-                버튼스타일 += 'opacity:0.3; color:#888;';
+                // 이전달/다음달 날짜 (흐리게)
                 배경색 = 'rgba(45, 45, 45, 255)';
+                버튼스타일 += 'opacity:0.3; color:#888;';
             }
             
-            new 요소(`${week+1}주`, `day${week}_${day}`, 'button', 배경색, '10vw', '100%', 표시할날짜, { 
-                style: 버튼스타일
+            new 요소(`${week+1}주`, `day${week}_${day}`, 'button', 배경색, '10vw', '100%', 날짜정보.일, { 
+                style: 버튼스타일,
+                onclick: `날짜클릭(${날짜정보.년도}, ${날짜정보.월}, ${날짜정보.일}, '${날짜정보.타입}')`
             });
-            
-            전체카운터++;
         }
-        
-        // 모든 날짜를 표시했으면 루프 종료
-        if (날짜카운터 > 해당월의총일수 && 다음달카운터 > 7) break;
+    }
+}
+
+// 날짜 클릭 이벤트
+function 날짜클릭(년도, 월, 일, 타입) {
+    if (타입 === '현재달') {
+        console.log(`${년도}년 ${월 + 1}월 ${일}일이 선택되었습니다.`);
+        // 일정 추가/조회 로직
+    } else {
+        console.log(`${타입} ${일}일 클릭 - ${년도}년 ${월 + 1}월로 이동`);
+        캘린더생성(년도, 월);
     }
 }
 
@@ -161,6 +180,7 @@ function 다음달보기(현재년도, 현재월) {
     캘린더생성(새년도, 새월);
 }
 
-// 전역 함수로 등록 (onclick에서 사용)
+// 전역 함수로 등록
 window.이전달보기 = 이전달보기;
 window.다음달보기 = 다음달보기;
+window.날짜클릭 = 날짜클릭;

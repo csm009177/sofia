@@ -1,7 +1,8 @@
 import { 요소 } from './render.js';
-// import { 캘린더생성 } from './main/calendar_ref.js';
+import { 캘린더생성 } from './main/calendar_ref.js';
 // import { 캘린더생성 } from './main/calendar.js';
-import { 캘린더생성 } from './main/calendar2.js';
+// import { 캘린더생성 } from './main/calendar2.js';
+// import { 캘린더생성 } from './main/calendar_ref2.js';
 
 
 export function 메인생성(){
