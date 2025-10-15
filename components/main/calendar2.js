@@ -3,6 +3,8 @@ import { 요소 } from "../render.js";
 export function 캘린더생성(  ) {
   const 현재 = new Date();
   const 현재월인덱스 = 현재.getMonth(); // 0~11
+  const 현재요일인덱스 = 현재.getDay(); // 0: 일요일, 1: 월요일, ..., 6: 토요일
+  const 현재일 = 현재.getDate(); // 1~31
 
   const 언어모드 = {
     한국어: {
@@ -36,7 +38,7 @@ export function 캘린더생성(  ) {
       style: 'display:block;'
     });
       //월표시
-      new 요소('캘린더헤더', '월표시란', 'div', 'rgba(55, 55, 55, 55)', '100%', '10vh', `${현재월인덱스 + 1}월`, {
+      new 요소('캘린더헤더', '월표시란', 'div', 'rgba(55, 55, 55, 55)', '100%', '10vh', `${언어모드.영어.월명[현재월인덱스]}`, {
         style : 'display:flex; justify-content:center; align-items:center; font-size:5rem; font-weight:bold;'
       });
       // 요일명표시 컨테이너
