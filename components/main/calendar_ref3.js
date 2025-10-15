@@ -1,5 +1,7 @@
 import { 요소 } from '../render.js';
 
+
+//! 현재달의 첫번째 요일을 사용해서 매칭되는 현재달의 첫번째 주의 날짜부터 채우는 방식
 export function 캘린더생성(년도 = null, 월 = null){
     // 매개변수가 없으면 현재 날짜 사용
     const 현재 = new Date();

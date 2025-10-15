@@ -1,3 +1,20 @@
+/**
+ * 요소 생성 클래스
+ * @param {string} 부모클래스 - 부모 요소의 클래스명 또는 "root" (필수)
+ * @param {string} 클래스명 - 생성할 요소의 클래스명 (필수)
+ * @param {string} 생성할요소 - 생성할 HTML 요소 타입 (예: 'div', 'span') (필수)
+ * @param {string} 색갈 - 배경색 (기본값: 'transparent')
+ * @param {string} 넓이 - 요소의 너비 (기본값: 'auto')
+ * @param {string} 높이 - 요소의 높이 (기본값: 'auto')
+ * @param {string} 텍스트 - 요소의 텍스트 내용 (기본값: '')
+ * @param {object} 속성 - 추가 속성 (예: { id: 'myId', onclick: 'myFunction()' }) (기본값: {})
+ * @returns {HTMLElement} 생성된 요소
+ * @throws {Error} 필수 매개변수가 누락된 경우
+ * @throws {Error} 부모 요소를 찾을 수 없는 경우
+ * @throws {Error} 요소 생성 중 오류가 발생한 경우
+ */
+
+
 export class 요소 {
   constructor(
     부모클래스,

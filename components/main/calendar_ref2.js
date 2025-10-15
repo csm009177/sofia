@@ -1,5 +1,7 @@
 import { 요소 } from '../render.js';
 
+
+//! 해당월의 일요일부터 날짜를 채우는 방식
 export function 캘린더생성(년도 = null, 월 = null){
     // 매개변수가 없으면 현재 날짜 사용
     const 현재 = new Date();
