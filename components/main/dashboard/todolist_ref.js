@@ -47,8 +47,21 @@ function 노션라인생성(내용 = '', 타입 = 'paragraph') {
         // 투두 체크박스
         new 요소(`컨텐츠${라인카운터}`, `체크${라인카운터}`, 'div', 'transparent', '18px', '18px', '☐', { 
             style: 'margin-right:8px; cursor:pointer; user-select:none; font-size:16px; color:#999; display:flex; align-items:center; justify-content:center;',
-            onclick: `투두토글('${라인ID}')`
+            onclick: `window.투두토글('${라인ID}')`
         });
+        
+        // 추가 안전장치: 직접 이벤트 리스너 추가
+        setTimeout(() => {
+            const 체크박스 = document.getElementById(`체크${라인카운터}`);
+            if (체크박스) {
+                체크박스.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.투두토글(라인ID);
+                });
+                console.log('체크박스 이벤트 리스너 추가됨:', `체크${라인카운터}`); // 디버깅용
+            }
+        }, 10);
     }
     
     // 텍스트 입력/표시 영역
@@ -217,22 +230,32 @@ function 라인을투두로변환(라인ID) {
 
 // 투두 토글
 window.투두토글 = function(라인ID) {
+    console.log('투두토글 호출됨:', 라인ID); // 디버깅용
+    
     const 라인번호 = 라인ID.replace('라인', '');
     const 체크박스 = document.querySelector(`#체크${라인번호}`);
     const 텍스트요소 = document.querySelector(`#텍스트${라인번호}`);
     
+    console.log('체크박스:', 체크박스, '텍스트요소:', 텍스트요소); // 디버깅용
+    
     if (체크박스 && 텍스트요소) {
+        console.log('현재 체크박스 상태:', 체크박스.textContent); // 디버깅용
+        
         if (체크박스.textContent === '☐') {
             체크박스.textContent = '☑';
             체크박스.style.color = '#0078d4';
             텍스트요소.style.textDecoration = 'line-through';
             텍스트요소.style.opacity = '0.6';
+            console.log('체크됨으로 변경'); // 디버깅용
         } else {
             체크박스.textContent = '☐';
             체크박스.style.color = '#999';
             텍스트요소.style.textDecoration = 'none';
             텍스트요소.style.opacity = '1';
+            console.log('체크 해제됨으로 변경'); // 디버깅용
         }
+    } else {
+        console.log('체크박스 또는 텍스트요소를 찾을 수 없음'); // 디버깅용
     }
 }
 
