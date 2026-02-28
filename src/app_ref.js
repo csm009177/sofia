@@ -7,6 +7,9 @@ const port = 3000;
 // 파일 캐시 객체
 const fileCache = new Map();
 
+// 자식 프로세스를 생성하기 위한 exec 함수
+const { exec } = require("child_process");
+
 // main.js에서 import되는 파일들을 자동 감지하는 함수
 function extractImportsFromFile(filePath) {
   try {
@@ -134,4 +137,10 @@ const serv = http.createServer((req, res) => {
 
 serv.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
+  // 자동 브라우저 실행
+  exec(`start http://${hostname}:${port}/`, (err) => {
+    if (err) {
+      console.error("Failed to open browser:", err);
+    }
+  });
 });
