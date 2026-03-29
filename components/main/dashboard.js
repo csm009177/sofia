@@ -1,9 +1,9 @@
 import {요소} from '../render.js';
-import {투두리스트생성} from './dashboard/todolist_ref.js';
+import {투두리스트생성} from './dashboard/todolist.js';
 
 
 
-export function 대쉬보드생성(){
+export async function 대쉬보드생성(){
     // 데쉬보드 컨테이너
     new 요소('메인', '대쉬보드', 'div', 'rgba(50, 50, 50, 255)', '29vw', '89vh', '', {});
         // 공지사항

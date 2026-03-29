@@ -8,13 +8,13 @@ import { 대쉬보드생성 } from './main/dashboard.js';
 
 
 
-export function 메인생성(){
+export async function 메인생성(){
     // 메인 컨테이너 생성
     new 요소('root', '메인', 'div', 'rgba(50, 50, 50, 255)', '100vw', '90vh', '', { 
         style: 'display:flex; justify-content:auto; align-items:center;' 
     });
     캘린더생성();
     // 대쉬보드 생성
-   대쉬보드생성();
+    await 대쉬보드생성();
 
 }
